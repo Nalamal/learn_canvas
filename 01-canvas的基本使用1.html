@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 使用 canvas 的基本使用
+        1. 需要一个 canvas 标签
+        2. 需要获取 画笔 对象
+        3. 使用 canvas 提供api进行绘画 
+    -->
+
+    <!-- 使用body里面的标签的方式 创建一个 canvas 对象 -->
+    <!-- 注意：canvas 和别的元素不太一样，需要使用属性的方式设置宽和高，不然会有问题 -->
+    <canvas width="600" height="300" id="canvas"></canvas>
+    <script>
+      // 1. 获取canvas (画布) 标签
+      const canvas = document.getElementById("canvas");
+      // 2. 获取context (画笔) 对象
+      const context = canvas.getContext("2d");
+      // 3. 画出自己想要的图形
+      // 画一个方形, 有专门的api, fillRect(x, y, width, height)
+      context.fillRect(100, 100, 200, 200);
+    </script>
+  </body>
+</html>

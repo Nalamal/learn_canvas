@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* canvas {
+        width: 400;
+        height: 400;
+      } */
+    </style>
+  </head>
+  <body>
+    <script>
+      // cavnas 元素为了能正常显示里面的图形，需要使用属性来控制宽高
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 400;
+      document.body.append(canvas);
+      const context = canvas.getContext("2d");
+      context.fillRect(100, 100, 100, 100);
+    </script>
+  </body>
+</html>

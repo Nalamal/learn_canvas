@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+      // 3. 画线
+      context.moveTo(100, 100);
+      context.lineTo(300, 100);
+      // 设置线条的宽度
+      context.lineWidth = 10;
+      context.lineTo(200, 200);
+      // 如果有新的路径, 也要调用 stroke 才会有图像
+      context.stroke();
+    </script>
+  </body>
+</html>
