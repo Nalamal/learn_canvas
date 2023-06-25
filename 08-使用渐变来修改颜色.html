@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+
+      // 3. 学习使用线性渐变
+      // 3.1 创建
+      const gradient = context.createLinearGradient(0, 0, 600, 400);
+      // 3.2 从什么颜色开始渐变
+      gradient.addColorStop(0, "red");
+      // 3.3 中间颜色
+      gradient.addColorStop(0.25, "pink");
+      gradient.addColorStop(0.5, "orange");
+      // 3.3 到什么颜色结束
+      gradient.addColorStop(1, "blue");
+
+      // 画线
+      context.moveTo(0, 0);
+      context.lineTo(600, 400);
+      context.lineWidth = 20;
+      // 把渐变作为线条的颜色
+      context.strokeStyle = gradient;
+      context.stroke();
+    </script>
+  </body>
+</html>

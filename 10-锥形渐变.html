@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+
+      // 3.1 创建渐变对象
+      // 第一个参数其实是弧度值，如果想要以角度来计算，需要转换一下
+      const gradicate = context.createConicGradient(
+        45 * (Math.PI / 180),
+        100,
+        100
+      );
+      // 3.2 给渐变的颜色
+      gradicate.addColorStop(0, "red");
+      gradicate.addColorStop(0.5, "skyblue");
+      gradicate.addColorStop(1, "red");
+      // 3.3 作为context的颜色
+      context.fillStyle = gradicate;
+
+      context.fillRect(0, 0, 200, 200);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+
+      // 径向渐变
+      // 3.1 生成一个渐变对象
+      const gradient = context.createRadialGradient(100, 100, 0, 100, 100, 100);
+      // 3.2 添加渐变的颜色
+      gradient.addColorStop(0, "red");
+      gradient.addColorStop(1, "green");
+      // 3.3 把渐变赋给画笔
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 200, 200);
+    </script>
+  </body>
+</html>
