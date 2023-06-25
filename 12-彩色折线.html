@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+
+      // 把线条加粗
+      context.lineWidth = 20;
+      // 实现渐变
+      const g = context.createLinearGradient(100, 100, 500, 100);
+      g.addColorStop(0, "yellow");
+      g.addColorStop(0.25, "orange");
+      g.addColorStop(0.5, "pink");
+      g.addColorStop(1, "purple");
+      // 把渐变赋值给 context 的线条
+      context.strokeStyle = g;
+
+      // 3. 先把折线画出来
+      context.moveTo(100, 200);
+      context.lineTo(200, 100);
+      context.lineTo(300, 50);
+      context.lineTo(400, 200);
+      context.lineTo(500, 100);
+      context.stroke();
+    </script>
+  </body>
+</html>
