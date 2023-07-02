@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+      const context = canvas.getContext("2d");
+
+      // 填充一个三角形
+      // 1 绘制路径, 形成一个图形
+      //   context.moveTo(100, 100);
+      //   context.lineTo(100, 200);
+      //   context.lineTo(200, 200);
+      // 在调用fill方法的时候, 路径会自动连接起始点和终点
+      // context.lineTo(100, 100);
+      // 2 调用fill方法, 进行填充
+      //   context.fill();
+
+      // 填充一个园
+      // 1. 把圆的路径绘制出来
+      context.arc(300, 200, 100, 0, Math.PI);
+      // 2. 调用fill方法,进行填充
+      context.fill();
+    </script>
+  </body>
+</html>

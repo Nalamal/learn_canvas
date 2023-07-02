@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 创建 canvas 标签
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      document.body.append(canvas);
+
+      // 2. 得到 context 对象
+      const context = canvas.getContext("2d");
+
+      // 3. 描绘椭圆
+      context.ellipse(300, 200, 200, 100, Math.PI / 2, 0, Math.PI * 2);
+      context.stroke();
+    </script>
+  </body>
+</html>
