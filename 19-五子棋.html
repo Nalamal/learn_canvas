@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      canvas {
+        background-color: #0a0;
+        display: block;
+        margin: 0 auto;
+      }
+      .tip {
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tip">请黑棋落子</div>
+    <script>
+      // 1. 创建canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = 800;
+      canvas.height = 800;
+      document.body.append(canvas);
+
+      // 获取tip元素
+      const tip = document.querySelector(".tip");
+
+      // 2. 获取context
+      const context = canvas.getContext("2d");
+
+      // 3. 画棋盘
+      // 3.1 棋盘是由多条横线和纵线组合而成
+      // 循环14次，把线条画出来
+      for (let i = 1; i < 16; i++) {
+        // 横线
+        // 把线段的开头表示出来
+        context.moveTo(50, 50 * i);
+        // 线段的终点
+        context.lineTo(750, 50 * i);
+        context.stroke();
+
+        // 纵线
+        // 把线段的开头表示出来
+        context.moveTo(50 * i, 50);
+        // 线段的终点
+        context.lineTo(50 * i, 750);
+        context.stroke();
+      }
+
+      // 6.使用一个二维数组来吧所有的棋子存储起来
+      let circles = [];
+      for (let i = 0; i < 16; i++) {
+        circles[i] = [];
+      }
+
+      // 5. 使用一个变量保存当前的棋子颜色
+      let isBlack = true;
+
+      // 8.1 定义一个变量是否标识结束游戏
+      let endGame = false;
+
+      // 4. 当点击在棋盘里面的时候，绘制一个圆
+      canvas.addEventListener("click", (e) => {
+        let { offsetX, offsetY } = e;
+
+        // 判断点击的位置边界
+        if (offsetX < 25 || offsetX > 775 || offsetY < 25 || offsetY > 775) {
+          return;
+        }
+        // 格子所在的位置
+        let i = Math.floor((offsetX + 25) / 50);
+        let j = Math.floor((offsetY + 25) / 50);
+
+        // 8. 判断是否已经有人获胜
+        if (endGame) {
+          // 证明有人已经获胜
+          return;
+        }
+
+        // 6.2 判断当前位置是否已经存在棋子
+        if (circles[i][j]) {
+          // 提醒用户，已经存在棋子
+          tip.innerText = `这里不能重复落子，当前是${
+            isBlack ? "黑" : "白"
+          }子的回合`;
+          return;
+        }
+
+        let x = Math.floor(i) * 50;
+        let y = Math.floor(j) * 50;
+        context.beginPath();
+        context.arc(x, y, 20, 0, Math.PI * 2);
+
+        // 把对应的棋子存到二维数组里面
+        circles[i][j] = isBlack ? "black" : "white";
+
+        // 6.1 根据当前是哪种棋子，给不同的颜色
+        // context.fillStyle = isBlack === true ? "#000" : "#fff";
+        let tx = isBlack ? x - 10 : x + 10;
+        let ty = isBlack ? y - 10 : y + 10;
+        let g = context.createRadialGradient(tx, ty, 0, tx, ty, 30);
+        g.addColorStop(0, isBlack ? "#ccc" : "#666");
+        g.addColorStop(1, isBlack ? "#000" : "#fff");
+        context.fillStyle = g;
+        context.fill();
+        context.closePath();
+
+        // 7. 判断当前是否有对应的棋子连成五个一条线
+        endGame =
+          checkVertical(i, j) ||
+          checkHorizontal(i, j) ||
+          checkNW2SE(i, j) ||
+          checkNE2SW(i, j);
+        if (endGame) {
+          tip.innerText = `${
+            isBlack ? "黑" : "白"
+          }子已获胜，请刷新页面重新开始`;
+          return;
+        }
+
+        // 提醒用户换人了
+        tip.innerText = isBlack ? "请白棋落子" : "请黑棋落子";
+        isBlack = !isBlack;
+      });
+
+      // 纵向查找是否有五个连续相同的棋子
+      function checkVertical(row, col) {
+        // 定义一个变量，记录向上的次数
+        let up = 0;
+        // 定义一个变量，记录向下的次数
+        let down = 0;
+        let times = 0;
+
+        // 定义当前总共有几个已经连在一起
+        let count = 1; // 初始值为1 因为 circles[row][col] 自己本身算一个
+        // 避免出现死循环
+        while (times < 10000) {
+          times++;
+
+          let target = isBlack ? "black" : "white";
+          // 以row, col为起点，在二维数组上，向上查找
+          up++;
+          if (circles[row][col - up] && circles[row][col - up] == target) {
+            count++;
+          }
+          // 以row, col为起点，在二维数组上，向下查找
+          down++;
+          if (circles[row][col + down] && circles[row][col + down] == target) {
+            count++;
+          }
+
+          // 如果棋子已经大于一个指定的次数 或者 棋子不是连续的
+          if (
+            count >= 5 ||
+            (circles[row][col - up] !== target &&
+              circles[row][col + down] !== target)
+          ) {
+            break;
+          }
+        }
+        return count >= 5;
+      }
+
+      // 横向查找是否有五个连续相同的棋子
+      function checkHorizontal(row, col) {
+        // 定义一个变量，记录向左的次数
+        let keft = 0;
+        // 定义一个变量，记录向右的次数
+        let right = 0;
+        let times = 0;
+
+        // 定义当前总共有几个已经连在一起
+        let count = 1; // 初始值为1 因为 circles[row][col] 自己本身算一个
+        // 避免出现死循环
+        while (times < 10000) {
+          times++;
+
+          let target = isBlack ? "black" : "white";
+          // 以row, col为起点，在二维数组上，向左查找
+          left++;
+          if (circles[row - left][col] && circles[row - left][col] == target) {
+            count++;
+          }
+          // 以row, col为起点，在二维数组上，向右查找
+          right++;
+          if (
+            circles[row + right][col] &&
+            circles[row + right][col] == target
+          ) {
+            count++;
+          }
+
+          // 如果棋子已经大于一个指定的次数 或者 棋子不是连续的
+          if (
+            count >= 5 ||
+            (circles[row - left][col] !== target &&
+              circles[row + right][col] !== target)
+          ) {
+            break;
+          }
+        }
+        return count >= 5;
+      }
+
+      // 判断左上到右下的连续
+      function checkNW2SE(row, col) {
+        let lt = 0;
+        let rb = 0;
+        let target = isBlack ? "black" : "white";
+        let count = 1;
+
+        let time = 0;
+        while (time < 10000) {
+          times++;
+
+          lt++;
+          if (
+            circles[row - lt][col - lt] &&
+            circles[row - lt][col - lt] === target
+          ) {
+            count++;
+          }
+
+          rb++;
+          if (
+            circles[row - rb][col - rb] &&
+            circles[row + rb][col + rb] === target
+          ) {
+            count++;
+          }
+
+          if (
+            count > 5 ||
+            (circles[row - lt][col - lt] !== target &&
+              circles[row + rb][row + rb] !== target)
+          ) {
+            break;
+          }
+        }
+        return count >= 5;
+      }
+
+      // 判断右上到左下的连续
+      function checkNE2SW(row, col) {
+        let rt = 0;
+        let lb = 0;
+        let target = isBlack ? "black" : "white";
+        let count = 1;
+
+        let time = 0;
+        while (time < 10000) {
+          times++;
+
+          rt++;
+          if (
+            circles[row + rt][col - rt] &&
+            circles[row + rt][col - rt] === target
+          ) {
+            count++;
+          }
+
+          lb++;
+          if (
+            circles[row - lb][col + rb] &&
+            circles[row - lb][row + lb] === target
+          ) {
+            count++;
+          }
+
+          if (
+            count > 5 ||
+            (circles[row + rt][col - rt] !== target &&
+              circles[row - lb][row + lb] !== target)
+          ) {
+            break;
+          }
+        }
+        return count >= 5;
+      }
+    </script>
+  </body>
+</html>
